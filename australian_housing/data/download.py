@@ -6,8 +6,14 @@ from pathlib import Path
 import click
 import requests
 
+DEFAULT_URL = 'http://stat.data.abs.gov.au/sdmx-json/data/ABS_BA_SA2_ASGS2016/' \
+    + '1.9.1...0+1+102+1GSYD+10201.M/all?detail=Full&dimensionAtObservation=AllDimensions' \
+    + '&startPeriod=2011-07&endPeriod=2017-07'
+
 @click.command()
-@click.argument('url', type=click.Path())
+@click.option('--url',
+    default=DEFAULT_URL,
+    help='Download URL including query string')
 def download(url):
     """Download data from Australia Bureau of Statistics.
        Output is saved in data/raw
@@ -20,7 +26,7 @@ def download(url):
     raw_data_dir = project_dir / 'data' / 'raw'
     raw_data_file = raw_data_dir / 'australian_housing.json'
     logger.info('saving data to {}'.format(raw_data_file))
-    with open(raw_data_file) as f:
-        json.dump(json_data, raw_data_file)
+    with open(raw_data_file, 'w') as f:
+        json.dump(json_data, f)
     logger.info('raw data saved')
 
