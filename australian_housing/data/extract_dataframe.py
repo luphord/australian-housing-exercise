@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from datetime import datetime
 import logging
 from pathlib import Path
 
@@ -32,14 +33,20 @@ class AustralianHousingLoader:
             key_parts = [int(k) for k in key_parts]
             key_parts_decoded = []
             for idx, k in enumerate(key_parts):
-                assert k < len(obs_codes[idx]['values']), 'Cannot decode index {}, because {}nt value is requested, but there are only {} available'.format(idx, k, len(obs_code[idx]['values']))
-                key_parts_decoded.append(obs_codes[idx]['values'][k]['name'])
+                assert k < len(obs_codes[idx]['values']), 'Cannot decode index {}, because {}th value is requested, but there are only {} available'.format(idx, k, len(obs_code[idx]['values']))
+                if obs_codes[idx]['id'] == 'TIME_PERIOD': # we immediately decode the string to a date
+                    sdate = obs_codes[idx]['values'][k]['id']
+                    key_parts_decoded.append(datetime.strptime(sdate, '%Y-%m'))
+                else: # all non-date key parts are decoded using their code in dimensions
+                    key_parts_decoded.append(obs_codes[idx]['values'][k]['name'])
             # we discard all but one of the values as they do not contain information (which we check for safety)
             assert values[1] == 0 and values[2] is None and values[3] == 0 and values[4] == 0, 'Got unexpected data in values {} at key {}'.format(values, structured_key)
             yield key_parts_decoded + values[:1]
 
     def to_dataframe(self):
-        return pd.DataFrame(self.decode(), columns=self.header())
+        df = pd.DataFrame(self.decode(), columns=self.header())
+        df.index = df['Time']
+        return df
 
 @click.command()
 @click.option('--input_file', type=click.Path(exists=True), default=raw_data_file, help='Raw sdmx json input file')
