@@ -46,6 +46,7 @@ class AustralianHousingLoader:
     def to_dataframe(self):
         df = pd.DataFrame(self.decode(), columns=self.header())
         df.index = df['Time']
+        del df['Time']
         return df
 
 @click.command()
