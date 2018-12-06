@@ -1,3 +1,7 @@
+'''Module for managing paths inside the australian housing project.
+   Use e.g. paths.manager.raw_data_file for the path to the raw json data file.
+'''
+
 from pathlib import Path
 
 try:
@@ -23,3 +27,5 @@ class _PathManager:
         return self.project_dir / 'data' / 'processed' / 'new_south_wales_housing.csv'
 
 manager = _PathManager()
+
+__all__ = ['project_dir', 'manager']
