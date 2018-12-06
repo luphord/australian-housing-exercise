@@ -7,11 +7,7 @@ from pathlib import Path
 import click
 import pandas as pd
 
-project_dir = Path(__file__).resolve().parents[2]
-raw_data_dir = project_dir / 'data' / 'raw'
-raw_data_file = raw_data_dir / 'australian_housing.json'
-interim_data_dir = project_dir / 'data' / 'interim'
-interim_data_file = interim_data_dir / 'australian_housing_decoded.csv'
+from .. import paths
 
 class AustralianHousingLoader:
     def __init__(self, sdmx_json):
@@ -50,8 +46,8 @@ class AustralianHousingLoader:
         return df
 
 @click.command()
-@click.option('--input_file', type=click.Path(exists=True), default=raw_data_file, help='Raw sdmx json input file')
-@click.option('--output_file', type=click.Path(), default=interim_data_file, help='Output file for decoded data')
+@click.option('--input_file', type=click.Path(exists=True), default=paths.manager.raw_data_file, help='Raw sdmx json input file')
+@click.option('--output_file', type=click.Path(), default=paths.manager.interim_data_file, help='Output file for decoded data')
 def extract_dataframe(input_file, output_file):
     """Decode raw json file and convert to dataframe.
        Output is saved in data/interim.
