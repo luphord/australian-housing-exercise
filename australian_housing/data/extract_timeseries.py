@@ -8,6 +8,12 @@ import pandas as pd
 
 from .. import paths
 
+def load_interim(file_path):
+    df = pd.read_csv(file_path)
+    df.index = df['Time']
+    del df['Time']
+    return df
+
 def new_south_wales_index(df):
     return (df['Measure'] == 'Total number of dwelling units') \
         & (df['Sector of Ownership'] == 'Total Sectors') \
@@ -25,11 +31,11 @@ def extract_timeseries(input_file, output_file):
     """
     logger = logging.getLogger(__name__)
     logger.info('loading data')
-    df = pd.read_csv(input_file)
+    df = load_interim(input_file)
 
     logger.info('indexing datafram')
     nsw = df[new_south_wales_index(df)]
 
     logger.info('saving data to {}'.format(output_file))
-    nsw.to_csv(output_file)
+    nsw[['Value']].to_csv(output_file)
     logger.info('New South Wales timeseries saved')
