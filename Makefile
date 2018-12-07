@@ -50,7 +50,7 @@ execute_notebooks: data/processed/new_south_wales_housing.csv
 	jupyter nbconvert --execute notebooks/*.ipynb --inplace --to notebook
 
 reports/%.html: notebooks/%.ipynb data/processed/new_south_wales_housing.csv
-	jupyter nbconvert --execute $< --output-dir reports/
+	jupyter nbconvert --config util/nbconvert_config.py --execute $< --output-dir reports/
 
 ## Generate reports from jupyter notebooks
 reports: $(HTML_REPORTS)
