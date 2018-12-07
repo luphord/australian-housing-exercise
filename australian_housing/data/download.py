@@ -21,10 +21,12 @@ def download(url):
        Output is saved in data/raw
     """
     logger = logging.getLogger(__name__)
-    logger.info('downloading data')
+    logger.info('download url is {}'.format(url))
+    logger.info('downloading data...')
     json_data = requests.get(url).json()
+    logger.info('json successfully downloaded')
 
-    logger.info('saving data to {}'.format(paths.manager.raw_data_file))
+    logger.info('saving data to {}...'.format(paths.manager.raw_data_file))
     with open(paths.manager.raw_data_file, 'w') as f:
         json.dump(json_data, f)
     logger.info('raw data saved')

@@ -9,6 +9,9 @@ import pandas as pd
 from .. import paths
 
 def new_south_wales_index(df):
+    '''Returns a boolean index with all rows related to new houses
+       approved in New South Wales.
+    '''
     return (df['Measure'] == 'Total number of dwelling units') \
         & (df['Sector of Ownership'] == 'Total Sectors') \
         & (df['Type of work'] == 'New') \
@@ -26,10 +29,12 @@ def extract_timeseries(input_file, output_file):
     logger = logging.getLogger(__name__)
     logger.info('loading data')
     df = pd.read_csv(input_file, index_col=0)
+    logger.info('data frame has {} rows before indexing'.format(len(df)))
 
-    logger.info('indexing datafram')
+    logger.info('indexing data frame...')
     nsw = df[new_south_wales_index(df)]
+    logger.info('data frame has {} rows after indexing'.format(len(nsw)))
 
-    logger.info('saving data to {}'.format(output_file))
+    logger.info('saving data to {}...'.format(output_file))
     nsw[['Value']].to_csv(output_file)
     logger.info('New South Wales timeseries saved')

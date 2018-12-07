@@ -57,9 +57,10 @@ def extract_dataframe(input_file, output_file):
     with open(input_file) as f:
         sdmx_json = json.load(f)
 
-    logger.info('creating data frame')
+    logger.info('creating data frame...')
     loader = AustralianHousingLoader(sdmx_json)
     df = loader.to_dataframe()
+    logger.info('decoding and conversion to data frame successful')
 
     logger.info('saving data to {}'.format(output_file))
     df.to_csv(output_file)
