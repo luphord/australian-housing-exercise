@@ -42,11 +42,16 @@ data/processed/new_south_wales_housing.csv: data/interim/australian_housing_deco
 ## Extract New South Wales housing time series
 extract_timeseries: data/processed/new_south_wales_housing.csv
 
+## Generate reports from jupyter notebooks
+reports: data/processed/new_south_wales_housing.csv
+	jupyter nbconvert --execute notebooks/*.ipynb --output-dir reports/
+
 ## Delete all compiled Python files, data files and reports
 clean:
 	rm -f data/raw/australian_housing.json
 	rm -f data/interim/australian_housing_decoded.csv
 	rm -f data/processed/new_south_wales_housing.csv
+	rm -f reports/*.html
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 
