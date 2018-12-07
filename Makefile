@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements download extract_dataframe extract_timeseries
+.PHONY: clean data lint requirements download extract_dataframe extract_timeseries reports
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -8,6 +8,9 @@ PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = data-science-exercise
 PYTHON_INTERPRETER = python3
+IPYNB_FILES=$(wildcard notebooks/*.ipynb)
+HTML=$(IPYNB_FILES:.ipynb=.html)
+HTML_REPORTS=$(HTML:notebooks/%=reports/%)
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -46,9 +49,11 @@ extract_timeseries: data/processed/new_south_wales_housing.csv
 execute_notebooks: data/processed/new_south_wales_housing.csv
 	jupyter nbconvert --execute notebooks/*.ipynb --inplace --to notebook
 
+reports/%.html: notebooks/%.ipynb data/processed/new_south_wales_housing.csv
+	jupyter nbconvert --execute $< --output-dir reports/
+
 ## Generate reports from jupyter notebooks
-reports: data/processed/new_south_wales_housing.csv
-	jupyter nbconvert --execute notebooks/*.ipynb --output-dir reports/
+reports: $(HTML_REPORTS)
 
 ## Delete all compiled Python files, data files and reports
 clean:
