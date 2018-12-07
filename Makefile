@@ -42,6 +42,10 @@ data/processed/new_south_wales_housing.csv: data/interim/australian_housing_deco
 ## Extract New South Wales housing time series
 extract_timeseries: data/processed/new_south_wales_housing.csv
 
+## Execute and save notebooks
+execute_notebooks: data/processed/new_south_wales_housing.csv
+	jupyter nbconvert --execute notebooks/*.ipynb --inplace --to notebook
+
 ## Generate reports from jupyter notebooks
 reports: data/processed/new_south_wales_housing.csv
 	jupyter nbconvert --execute notebooks/*.ipynb --output-dir reports/
