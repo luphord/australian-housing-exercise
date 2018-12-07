@@ -27,29 +27,28 @@ requirements: test_environment
 data/raw/australian_housing.json:
 	$(PYTHON_INTERPRETER) -m australian_housing download
 
+## Download raw json data from Australian Bureau of Statistics
 download: data/raw/australian_housing.json
 
 data/interim/australian_housing_decoded.csv: data/raw/australian_housing.json
 	$(PYTHON_INTERPRETER) -m australian_housing extract_dataframe
 
+## Decode raw json data and extract a (multidimensional) dataframe
 extract_dataframe: data/interim/australian_housing_decoded.csv
 
 data/processed/new_south_wales_housing.csv: data/interim/australian_housing_decoded.csv
 	$(PYTHON_INTERPRETER) -m australian_housing extract_timeseries
 
+## Extract New South Wales housing time series
 extract_timeseries: data/processed/new_south_wales_housing.csv
 
-## Delete all compiled Python files
+## Delete all compiled Python files, data files and reports
 clean:
 	rm -f data/raw/australian_housing.json
 	rm -f data/interim/australian_housing_decoded.csv
 	rm -f data/processed/new_south_wales_housing.csv
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
-
-## Lint using flake8
-lint:
-	flake8 src
 
 ## Set up python interpreter environment
 create_environment:
@@ -68,11 +67,6 @@ else
 	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
 	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
 endif
-
-## Test python environment is setup correctly
-test_environment:
-	$(PYTHON_INTERPRETER) test_environment.py
-
 
 #################################################################################
 # Self Documenting Commands                                                     #
