@@ -30,16 +30,16 @@ def cosine(t):
     '''
     return [np.cos(t*2*np.pi)]
 
-#def regressor(poly_order, add_cosine):
-#    '''Returns a regressor function containing a polynom of order poly_order
-#       and optionally a cosine function (with periodicity of 1).
-#    '''
-#    def _regressor(t):
-#        l = polynom(t, poly_order)
-#        if add_cosine:
-#            l.extend(cosine(t))
-#        return np.stack(l, axis=1)
-#    return _regressor
+def periodic_regressor(poly_order, add_cosine):
+    '''Returns a regressor function containing a polynom of order poly_order
+       and optionally a cosine function (with periodicity of 1).
+    '''
+    def _regressor(t):
+        l = polynom(t, poly_order)
+        if add_cosine:
+            l.extend(cosine(t))
+        return np.stack(l, axis=1)
+    return _regressor
 
 def fit_ols(time_series, regressor):
     '''OLS fit the first column of time_series on the regressor function
