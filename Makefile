@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements download extract_dataframe extract_timeseries reports
+.PHONY: clean data lint requirements download extract_dataframe extract_timeseries reports folders
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -27,7 +27,13 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
-data/raw/australian_housing.json:
+folders:
+	mkdir -p data/raw
+	mkdir -p data/interim
+	mkdir -p data/processed
+	mkdir -p reports
+
+data/raw/australian_housing.json: folders
 	$(PYTHON_INTERPRETER) -m australian_housing download
 
 ## Download raw json data from Australian Bureau of Statistics
