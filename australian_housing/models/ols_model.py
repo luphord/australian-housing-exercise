@@ -54,7 +54,8 @@ def history_and_prediction_plot(fig, time_series, model_fit, regressor, last_dat
        including confidence intervals for level alpha.
     '''
     t = encode_dates(time_series.index.values)
-    t_all = encode_dates(pd.date_range(time_series.index[0], last_date, freq=freq).values)
+    t_range = pd.date_range(time_series.index[0], last_date, freq=freq)
+    t_all = encode_dates(t_range.values)
     pred = model_fit.get_prediction(regressor(t_all))
     resf = pred.summary_frame(alpha=alpha)
 
@@ -63,8 +64,9 @@ def history_and_prediction_plot(fig, time_series, model_fit, regressor, last_dat
     ax.grid(True)
     ax.set_xlabel('time')
     ax.set_ylabel('Number of dwelling units approved')
-    ax.plot(t, time_series.iloc[:,0].values)
-    ax.plot(t_all, resf['mean']);
-    ax.plot(t_all, resf['obs_ci_lower']);
-    ax.plot(t_all, resf['obs_ci_upper']);
-    return fig
+    ax.plot(t, time_series.iloc[:,0].values, label='history')
+    ax.plot(t_all, resf['mean'], label='prediction');
+    ax.plot(t_all, resf['obs_ci_lower'], linestyle='dashed', label='lower quantile');
+    ax.plot(t_all, resf['obs_ci_upper'], linestyle='dashed', label='upper quantile');
+    ax.legend()
+    return fig, pd.DataFrame(pred.predicted_mean, index=t_range, columns=['Prediction'])
