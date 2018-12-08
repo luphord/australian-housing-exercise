@@ -11,6 +11,7 @@ PYTHON_INTERPRETER = python3
 IPYNB_FILES=$(wildcard notebooks/*.ipynb)
 HTML=$(IPYNB_FILES:.ipynb=.html)
 HTML_REPORTS=$(HTML:notebooks/%=reports/%)
+DOCKER_IMAGE=datascienceexercise
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
@@ -87,6 +88,14 @@ else
 	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
 	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
 endif
+
+## Create docker image from Dockerfile
+docker_image:
+	docker build -t $(DOCKER_IMAGE) .
+
+## Run pipeline in docker container output folders mounted 
+run_docker:
+	docker run -v $(shell pwd)/data:/opt/data-science-exercise/data -v $(shell pwd)/reports:/opt/data-science-exercise/reports --rm $(DOCKER_IMAGE)
 
 #################################################################################
 # Self Documenting Commands                                                     #
