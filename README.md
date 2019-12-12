@@ -2,6 +2,8 @@
 
 # data-science-exercise
 
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/luphord/australian-housing-exercise)
+
 *Author: luphord*
 
 ## Overview
