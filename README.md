@@ -2,7 +2,7 @@
 
 # data-science-exercise
 
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/luphord/australian-housing-exercise)
+[<img src="https://img.shields.io/docker/cloud/build/luphord/australian-housing-exercise">](https://hub.docker.com/r/luphord/australian-housing-exercise)
 
 *Author: luphord*
 
